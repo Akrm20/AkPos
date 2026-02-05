@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>نظام نقطة البيع والمخزون</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; margin: 0; padding: 0; background-color: #f0f2f5; font-size: 11px; }
+        .tab-bar { display: flex; justify-content: space-around; background-color: #34495e; position: fixed; bottom: 0; width: 100%; height: 50px; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); }
+        .tab-btn { background: none; border: none; color: #bdc3c7; font-size: 10px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .tab-btn.active { color: #fff; background-color: #2c3e50; }
+        .tab-content { display: none; padding: 10px; padding-bottom: 60px; }
+        .tab-content.active { display: block; }
+        .header { background: #2c3e50; color: white; padding: 10px; text-align: center; font-size: 14px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="header">نظام المبيعات والمخزون</div>
+
+<div id="tab1" class="tab-content active"></div> <div id="tab2" class="tab-content"></div> <div id="tab3" class="tab-content"></div> <div id="tab4" class="tab-content"></div> <div id="tab5" class="tab-content"></div> <nav class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('tab1', this)">🛒<br>البيع</button>
+    <button class="tab-btn" onclick="showTab('tab2', this)">📋<br>الفواتير</button>
+    <button class="tab-btn" onclick="showTab('tab3', this)">📦<br>المخزون</button>
+    <button class="tab-btn" onclick="showTab('tab4', this)">🏷️<br>الأصناف</button>
+    <button class="tab-btn" onclick="showTab('tab5', this)">🔗<br>التكامل</button>
+</nav>
+
+    <div id="sys-nav-link" style="position: fixed; top: 10px; left: 10px; z-index: 9999;">
+        <a href="https://akrm20.github.io/AkrmS/" style="
+            background: #2c3e50; 
+            color: white; 
+            text-decoration: none; 
+            padding: 5px 12px; 
+            border-radius: 20px; 
+            font-size: 10px; 
+            font-weight: bold; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        ">
+            📊 النظام المحاسبي
+        </a>
+    </div>
+    
+<script src="DbPos.js"></script>
+<script src="pos.js"></script>
+<script src="Sale.js"></script>
+<script src="Inv.js"></script>
+<script src="Itm.js"></script>
+<script src="Inti.js"></script>
+<script src="CuSu.js"></script>
+
+
+<script>
+// === indexPos.html التعديل ===
+
+// بدلاً من window.onload القديمة، نستخدم هذه الدالة
+function startPosApp() {
+    console.log("Starting App after DB is ready...");
+    showTab('tab1', document.querySelector('.tab-btn'));
+}
+
+function showTab(tabId, btn) {
+    // التأكد من أن القاعدة جاهزة قبل تنفيذ أي عملية
+    if (!dbPos) {
+        console.warn("Waiting for Database...");
+        return; 
+    }
+
+    document.querySelectorAll('.tab-content').forEach(div => div.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    if(btn) btn.classList.add('active');
+    
+    // تشغيل الدوال
+    if(tabId === 'tab1') initPos();
+    if(tabId === 'tab2') initSalesHistory();
+    if(tabId === 'tab3') initInventoryMgmt();
+    if(tabId === 'tab4') initItemMgmt();
+    if(tabId === 'tab5') initIntegration();
+}
+
+</script>
+</body>
+</html>
